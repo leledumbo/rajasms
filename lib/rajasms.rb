@@ -5,7 +5,7 @@ module Rajasms
   class Client
   	include HTTParty
 
-    RAJASMS_URI = 'http://162.211.84.203'
+    RAJASMS_URI = 'http://128.199.232.241'
     SMSREGULER_PATH = '/sms/smsreguler.php'
     SMSMASKING_PATH = '/sms/smsmasking.php'
     SMSSALDO_PATH = '/sms/smssaldo.php'
@@ -14,9 +14,8 @@ module Rajasms
 
   	base_uri RAJASMS_URI
 
-  	def initialize username, password, api_key
+  	def initialize username, api_key
   		@username = username
-      @password = password
       @api_key  = api_key
   	end
 
@@ -43,7 +42,7 @@ module Rajasms
     private
     def build_query query={}
       query ||= {}
-      query.merge!(key: @api_key, username: @username, password: @password)
+      query.merge!(username: @username, key: @api_key)
       {query: query}
     end
 
@@ -53,7 +52,7 @@ module Rajasms
         code, data = response.body.split('|')
         {code: code, data: data}
       else
-        raise 'too long brow'
+        raise "panjang maksimum sms adalah 480 karakter, mencoba mengirim #{message.length} karakter"
       end
     end
 
